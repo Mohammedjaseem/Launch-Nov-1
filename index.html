@@ -37,12 +37,11 @@
       font-size: 3.5rem;
       margin-bottom: 1rem;
       color: #1a5d1a;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
       font-weight: 600;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .malayalam-text {
-      font-family: 'Noto Sans Malayalam', 'Segoe UI', sans-serif;
       font-size: 1.8rem;
       margin-bottom: 1.5rem;
       color: #2e7d32;
@@ -82,7 +81,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
       transition: left 1.2s ease;
     }
 
@@ -90,7 +89,7 @@
       left: 100%;
     }
 
-    /* Overlay Container */
+    /* Full image overlay */
     .image-container {
       position: fixed;
       top: 0;
@@ -105,7 +104,6 @@
       visibility: hidden;
     }
 
-    /* Responsive Image */
     .full-image {
       position: absolute;
       top: 50%;
@@ -114,12 +112,10 @@
       width: 100vw;
       height: 100vh;
       opacity: 0;
-      object-fit: cover; /* desktop default */
-      border-radius: 0;
+      object-fit: cover; /* Full cover for laptops */
       transition: none;
     }
 
-    /* Loading indicator */
     .image-loading {
       position: absolute;
       top: 50%;
@@ -180,26 +176,11 @@
       opacity: 0;
     }
 
-    /* ✅ Mobile Optimization */
     @media (max-width: 768px) {
-      h1 {
-        font-size: 2.4rem;
-      }
-
-      .malayalam-text {
-        font-size: 1.4rem;
-      }
-
-      .launch-btn {
-        padding: 0.8rem 2rem;
-        font-size: 1.1rem;
-      }
-
-      /* Mobile image behavior: contain (no cropping) */
-      .full-image {
-        object-fit: contain;
-        background: black;
-      }
+      h1 { font-size: 2.4rem; }
+      .malayalam-text { font-size: 1.4rem; }
+      .launch-btn { padding: 0.8rem 2rem; font-size: 1.1rem; }
+      .full-image { object-fit: contain; background: black; }
     }
   </style>
 </head>
@@ -223,59 +204,39 @@
     />
   </div>
 
-  <audio id="backgroundMusic" loop>
-    <source src="https://connectv2s3.s3.ap-south-1.amazonaws.com/uploads/FDownload.app-867552350613009-320kbps.mp3" type="audio/mpeg" />
-    Your browser does not support the audio element.
-  </audio>
-
   <script>
     const launchBtn = document.getElementById("launchBtn");
     const imageContainer = document.getElementById("imageContainer");
     const fullImage = document.getElementById("fullImage");
-    const backgroundMusic = document.getElementById("backgroundMusic");
     const imageLoading = document.getElementById("imageLoading");
     const overlayText = document.getElementById("overlayText");
     const glowEffect = document.getElementById("glowEffect");
 
+    let activeAudio = null;
+    const AUDIO_SRC = "https://connectv2s3.s3.ap-south-1.amazonaws.com/uploads/FDownload.app-867552350613009-320kbps.mp3";
+    const LOOP_DURATION = 31; // seconds to loop
+    const CROSSFADE_TIME = 3; // seconds fade overlap
+
     function createParticles() {
       const particles = [];
       for (let i = 0; i < 30; i++) {
-        const particle = document.createElement("div");
-        particle.classList.add("particle");
-        imageContainer.appendChild(particle);
-        particles.push(particle);
+        const p = document.createElement("div");
+        p.classList.add("particle");
+        imageContainer.appendChild(p);
+        particles.push(p);
       }
       return particles;
     }
 
     function animateParticles(particles) {
-      particles.forEach((particle, index) => {
-        const angle = (index / particles.length) * Math.PI * 2;
-        const distance = 100 + Math.random() * 200;
-        const duration = 2 + Math.random() * 2;
-        const delay = Math.random() * 1;
-
-        gsap.set(particle, {
-          x: Math.cos(angle) * distance,
-          y: Math.sin(angle) * distance,
-          scale: 0,
-        });
-
-        gsap.to(particle, {
-          opacity: 1,
-          scale: 1,
-          duration: duration * 0.4,
-          delay: delay,
-          ease: "power2.out",
-        });
-
-        gsap.to(particle, {
-          opacity: 0,
-          scale: 0,
-          duration: duration * 0.6,
-          delay: delay + duration * 0.4,
-          ease: "power2.in",
-        });
+      particles.forEach((p, i) => {
+        const angle = (i / particles.length) * Math.PI * 2;
+        const dist = 100 + Math.random() * 200;
+        const dur = 2 + Math.random() * 2;
+        const delay = Math.random();
+        gsap.set(p, { x: Math.cos(angle) * dist, y: Math.sin(angle) * dist, scale: 0 });
+        gsap.to(p, { opacity: 1, scale: 1, duration: dur * 0.4, delay, ease: "power2.out" });
+        gsap.to(p, { opacity: 0, scale: 0, duration: dur * 0.6, delay: delay + dur * 0.4, ease: "power2.in" });
       });
     }
 
@@ -288,14 +249,43 @@
       });
     }
 
+    // 🎵 Seamless looping of a specific segment (0–31s)
+    function playLoopSegment() {
+      const newAudio = new Audio(AUDIO_SRC);
+      newAudio.volume = 0;
+      newAudio.currentTime = 0;
+      newAudio.play();
+
+      // Crossfade
+      if (activeAudio) {
+        gsap.to(activeAudio, {
+          volume: 0,
+          duration: CROSSFADE_TIME,
+          onComplete: () => activeAudio.pause(),
+        });
+      }
+      gsap.to(newAudio, { volume: 1, duration: CROSSFADE_TIME });
+      activeAudio = newAudio;
+
+      // Schedule next loop
+      const nextStart = (LOOP_DURATION - CROSSFADE_TIME) * 1000;
+      setTimeout(playLoopSegment, nextStart);
+
+      // Stop after LOOP_DURATION to avoid drift
+      setTimeout(() => {
+        if (!newAudio.paused && newAudio.currentTime >= LOOP_DURATION - 0.5) newAudio.pause();
+      }, LOOP_DURATION * 1000);
+    }
+
     function fadeOutAudio() {
-      gsap.to(backgroundMusic, {
+      if (!activeAudio) return;
+      gsap.to(activeAudio, {
         volume: 0,
-        duration: 4,
+        duration: 3,
         ease: "power2.out",
         onComplete: () => {
-          backgroundMusic.pause();
-          backgroundMusic.volume = 1;
+          activeAudio.pause();
+          activeAudio = null;
         },
       });
     }
@@ -305,11 +295,9 @@
       gsap.set(imageLoading, { opacity: 1, visibility: "visible" });
       imageLoading.classList.add("pulse");
       await preloadImage();
-
       gsap.to(imageLoading, {
         opacity: 0,
         duration: 1.2,
-        ease: "power2.out",
         onComplete: () => {
           imageLoading.classList.remove("pulse");
           gsap.set(imageLoading, { visibility: "hidden" });
@@ -320,51 +308,27 @@
       const particles = createParticles();
       gsap.set(fullImage, { scale: 0, opacity: 0 });
 
-      const mainTimeline = gsap.timeline({
+      const tl = gsap.timeline({
         onComplete: () => {
-          gsap.to(overlayText, {
-            opacity: 1,
-            visibility: "visible",
-            duration: 1.8,
-            ease: "power2.out",
-          });
-          setTimeout(() => fadeOutAudio(), 31000);
+          gsap.to(overlayText, { opacity: 1, visibility: "visible", duration: 1.8 });
         },
       });
 
-      mainTimeline.to(imageContainer, {
-        backgroundColor: "rgba(0, 0, 0, 0.95)",
-        duration: 3,
-        ease: "power3.inOut",
-      });
-
-      mainTimeline.to(glowEffect, {
-        width: "100vmax",
-        height: "100vmax",
-        opacity: 0.3,
-        duration: 2.5,
-        ease: "power2.out",
-      });
-
-      mainTimeline.add(() => animateParticles(particles), 0.5);
-
-      mainTimeline.to(fullImage, {
+      tl.to(imageContainer, { backgroundColor: "rgba(0,0,0,0.95)", duration: 3 });
+      tl.to(glowEffect, { width: "100vmax", height: "100vmax", opacity: 0.3, duration: 2.5 });
+      tl.add(() => animateParticles(particles), 0.5);
+      tl.to(fullImage, {
         scale: 1,
         opacity: 1,
         duration: 4,
         ease: "expo.out",
-        onStart: () => backgroundMusic.play(),
+        onStart: () => playLoopSegment(),
       }, 0.8);
-
-      mainTimeline.to(glowEffect, {
-        opacity: 0,
-        duration: 2,
-        ease: "power2.in",
-      }, 3);
+      tl.to(glowEffect, { opacity: 0, duration: 2 }, 3);
     });
 
     function closeImage() {
-      const closeTimeline = gsap.timeline({
+      const tl = gsap.timeline({
         onComplete: () => {
           gsap.set(imageContainer, { visibility: "hidden" });
           gsap.set(fullImage, { scale: 0, opacity: 0 });
@@ -372,26 +336,12 @@
           gsap.set(overlayText, { opacity: 0, visibility: "hidden" });
           document.querySelectorAll(".particle").forEach((p) => p.remove());
           launchBtn.disabled = false;
-          backgroundMusic.pause();
-          backgroundMusic.currentTime = 0;
-          backgroundMusic.volume = 1;
+          fadeOutAudio();
         },
       });
 
-      closeTimeline.to(fullImage, {
-        scale: 0,
-        opacity: 0,
-        duration: 2.5,
-        ease: "expo.inOut",
-      });
-
-      closeTimeline.to(imageContainer, {
-        backgroundColor: "rgba(0, 0, 0, 0)",
-        duration: 2.2,
-        ease: "power3.inOut",
-      }, 0.6);
-
-      fadeOutAudio();
+      tl.to(fullImage, { scale: 0, opacity: 0, duration: 2.5 });
+      tl.to(imageContainer, { backgroundColor: "rgba(0,0,0,0)", duration: 2.2 }, 0.6);
     }
 
     imageContainer.addEventListener("click", closeImage);
