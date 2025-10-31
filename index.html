@@ -1,672 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malabar academic city | Nov 1 | Team Connect</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #ffffff 0%, #f0fff0 100%);
-            color: #1a5d1a;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        /* Kerala Traditional Patterns */
-        .kerala-border {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .border-top, .border-bottom {
-            position: absolute;
-            width: 100%;
-            height: 40px;
-            background: repeating-linear-gradient(
-                90deg,
-                #1a5d1a,
-                #1a5d1a 10px,
-                #ffffff 10px,
-                #ffffff 20px
-            );
-        }
-        
-        .border-top {
-            top: 0;
-        }
-        
-        .border-bottom {
-            bottom: 0;
-        }
-        
-        .border-left, .border-right {
-            position: absolute;
-            width: 40px;
-            height: 100%;
-            background: repeating-linear-gradient(
-                180deg,
-                #1a5d1a,
-                #1a5d1a 10px,
-                #ffffff 10px,
-                #ffffff 20px
-            );
-        }
-        
-        .border-left {
-            left: 0;
-        }
-        
-        .border-right {
-            right: 0;
-        }
-        
-        /* Traditional Kerala Lamp */
-        .kerala-lamp {
-            position: absolute;
-            top: 50px;
-            width: 80px;
-            height: 120px;
-            z-index: 1;
-        }
-        
-        .lamp-base {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 60px;
-            background: #1a5d1a;
-            border-radius: 5px 5px 0 0;
-        }
-        
-        .lamp-middle {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 30px;
-            background: #1a5d1a;
-            border-radius: 30px 30px 0 0;
-        }
-        
-        .lamp-top {
-            position: absolute;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 30px;
-            background: #1a5d1a;
-            border-radius: 40px 40px 0 0;
-        }
-        
-        .lamp-flame {
-            position: absolute;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 30px;
-            background: #ff9800;
-            border-radius: 10px 10px 0 0;
-            animation: flicker 4s infinite alternate ease-in-out;
-        }
-        
-        @keyframes flicker {
-            0%, 100% { opacity: 0.6; height: 20px; transform: translateX(-50%) scale(0.9); }
-            25% { opacity: 0.8; height: 28px; transform: translateX(-50%) scale(1); }
-            50% { opacity: 1; height: 32px; transform: translateX(-50%) scale(1.1); }
-            75% { opacity: 0.9; height: 26px; transform: translateX(-50%) scale(1); }
-        }
-        
-        /* Coconut Tree */
-        .coconut-tree {
-            position: absolute;
-            bottom: 0;
-            right: 50px;
-            width: 60px;
-            height: 150px;
-            z-index: 1;
-        }
-        
-        .tree-trunk {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 15px;
-            height: 120px;
-            background: #8B4513;
-        }
-        
-        .tree-leaves {
-            position: absolute;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 70px;
-            background: #1a5d1a;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-        
-        .tree-leaves::before, .tree-leaves::after {
-            content: '';
-            position: absolute;
-            width: 70px;
-            height: 60px;
-            background: #1a5d1a;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-        
-        .tree-leaves::before {
-            top: -10px;
-            left: -30px;
-            transform: rotate(-30deg);
-        }
-        
-        .tree-leaves::after {
-            top: -10px;
-            right: -30px;
-            transform: rotate(30deg);
-        }
-        
-        /* Traditional Kerala Boat */
-        .kerala-boat {
-            position: absolute;
-            bottom: 30px;
-            left: 50px;
-            width: 100px;
-            height: 40px;
-            z-index: 1;
-        }
-        
-        .boat-body {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 20px;
-            background: #8B4513;
-            border-radius: 50% 50% 0 0;
-        }
-        
-        .boat-mast {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 5px;
-            height: 40px;
-            background: #8B4513;
-        }
-        
-        .boat-sail {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 30px solid transparent;
-            border-right: 30px solid transparent;
-            border-bottom: 40px solid #f0f0f0;
-        }
-        
-        .container {
-            max-width: 800px;
-            padding: 2rem;
-            z-index: 2;
-        }
-        
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            color: #1a5d1a;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            font-weight: 600;
-        }
-        
-        .malayalam-text {
-            font-family: 'Noto Sans Malayalam', 'Segoe UI', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: #2e7d32;
-        }
-        
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-            color: #388e3c;
-        }
-        
-        .launch-btn {
-            background: #1a5d1a;
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1.3rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.8s ease;
-            box-shadow: 0 4px 15px rgba(26, 93, 26, 0.3);
-            font-weight: bold;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .launch-btn:hover {
-            background: #2e7d32;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(26, 93, 26, 0.4);
-        }
-        
-        .launch-btn:active {
-            transform: translateY(-1px);
-        }
-        
-        .launch-btn:disabled {
-            background: #81c784;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .launch-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 1.2s ease;
-        }
-        
-        .launch-btn:hover::before {
-            left: 100%;
-        }
-        
-        .image-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            visibility: hidden;
-        }
-        
-        .full-image {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            /* Start as a tiny dot */
-            width: 0;
-            height: 0;
-            opacity: 0;
-            object-fit: cover;
-            border-radius: 0;
-            box-shadow: none;
-            transition: none;
-        }
-        
-        /* Loading indicator for the image */
-        .image-loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(26, 93, 26, 0.3);
-            border-radius: 50%;
-            border-top-color: #1a5d1a;
-            z-index: 12;
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .pulse {
-            animation: pulse 4s infinite ease-in-out;
-        }
-        
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
-        }
-        
-        .overlay-text {
-            position: absolute;
-            bottom: 30px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
-            z-index: 11;
-            opacity: 0;
-            visibility: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malabar Academic City | Nov 1 | Team Connect</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-        /* Glow effect */
-        .glow-effect {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(26, 93, 26, 0.1) 0%, rgba(26, 93, 26, 0) 70%);
-            z-index: 9;
-            opacity: 0;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #1a5d1a;
-            border-radius: 50%;
-            opacity: 0;
-        }
-    </style>
+    body {
+      background: linear-gradient(135deg, #ffffff 0%, #f0fff0 100%);
+      color: #1a5d1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 2rem;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      color: #1a5d1a;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      font-weight: 600;
+    }
+
+    .malayalam-text {
+      font-family: 'Noto Sans Malayalam', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #2e7d32;
+    }
+
+    .launch-btn {
+      background: #1a5d1a;
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.3rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.8s ease;
+      box-shadow: 0 4px 15px rgba(26, 93, 26, 0.3);
+      font-weight: bold;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .launch-btn:hover {
+      background: #2e7d32;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(26, 93, 26, 0.4);
+    }
+
+    .launch-btn:disabled {
+      background: #81c784;
+      cursor: not-allowed;
+    }
+
+    .launch-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 1.2s ease;
+    }
+
+    .launch-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Overlay Container */
+    .image-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      visibility: hidden;
+    }
+
+    /* Responsive Image */
+    .full-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 100vw;
+      height: 100vh;
+      opacity: 0;
+      object-fit: cover; /* desktop default */
+      border-radius: 0;
+      transition: none;
+    }
+
+    /* Loading indicator */
+    .image-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(26, 93, 26, 0.3);
+      border-radius: 50%;
+      border-top-color: #1a5d1a;
+      z-index: 12;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .pulse {
+      animation: pulse 4s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+    }
+
+    .overlay-text {
+      position: absolute;
+      bottom: 30px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      z-index: 11;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .glow-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(26, 93, 26, 0.1) 0%, rgba(26, 93, 26, 0) 70%);
+      z-index: 9;
+      opacity: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #1a5d1a;
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    /* ✅ Mobile Optimization */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.4rem;
+      }
+
+      .malayalam-text {
+        font-size: 1.4rem;
+      }
+
+      .launch-btn {
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+      }
+
+      /* Mobile image behavior: contain (no cropping) */
+      .full-image {
+        object-fit: contain;
+        background: black;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    
-    <div class="container">
+  <div class="container">
     <h1>Malabar Academic City</h1>
-        <div class="malayalam-text">കേരളപ്പിറവി ആശംസകൾ</div>
-        <button class="launch-btn" id="launchBtn">LAUNCH</button>
-    </div>
-    
-    <div class="image-container" id="imageContainer">
-        <div class="glow-effect" id="glowEffect"></div>
-        <div class="image-loading" id="imageLoading"></div>
-        <div class="overlay-text" id="overlayText">Click anywhere to return</div>
-        <img src="https://connectv2s3.s3.ap-south-1.amazonaws.com/uploads/WhatsApp_Image_2025-10-31_at_14.53.21_7ee36f36.jpg" alt="Kerala Landscape" class="full-image" id="fullImage">
-    </div>
-    
-    <audio id="backgroundMusic" loop>
-        <source src="https://connectv2s3.s3.ap-south-1.amazonaws.com/uploads/FDownload.app-867552350613009-320kbps.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    
-    <script>
-        const launchBtn = document.getElementById('launchBtn');
-        const imageContainer = document.getElementById('imageContainer');
-        const fullImage = document.getElementById('fullImage');
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const imageLoading = document.getElementById('imageLoading');
-        const overlayText = document.getElementById('overlayText');
-        const glowEffect = document.getElementById('glowEffect');
-        
-        // Create particle effect
-        function createParticles() {
-            const particles = [];
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                imageContainer.appendChild(particle);
-                particles.push(particle);
-            }
-            return particles;
-        }
+    <div class="malayalam-text">കേരളപ്പിറവി ആശംസകൾ</div>
+    <button class="launch-btn" id="launchBtn">LAUNCH</button>
+  </div>
 
-        // Animate particles
-        function animateParticles(particles) {
-            particles.forEach((particle, index) => {
-                const angle = (index / particles.length) * Math.PI * 2;
-                const distance = 100 + Math.random() * 200;
-                const duration = 2 + Math.random() * 2;
-                const delay = Math.random() * 1;
+  <div class="image-container" id="imageContainer">
+    <div class="glow-effect" id="glowEffect"></div>
+    <div class="image-loading" id="imageLoading"></div>
+    <div class="overlay-text" id="overlayText">Click anywhere to return</div>
+    <img
+      src="https://connectv2s3.s3.ap-south-1.amazonaws.com/uploads/WhatsApp_Image_2025-10-31_at_14.53.21_7ee36f36.jpg"
+      alt="Kerala Landscape"
+      class="full-image"
+      id="fullImage"
+    />
+  </div>
 
-                gsap.set(particle, {
-                    x: Math.cos(angle) * distance,
-                    y: Math.sin(angle) * distance,
-                    scale: 0
-                });
+  <audio id="backgroundMusic" loop>
+    <source src="https://connectv2s3.s3.ap-south-1.amazonaws.com/uploads/FDownload.app-867552350613009-320kbps.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
 
-                gsap.to(particle, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: duration * 0.4,
-                    delay: delay,
-                    ease: "power2.out"
-                });
+  <script>
+    const launchBtn = document.getElementById("launchBtn");
+    const imageContainer = document.getElementById("imageContainer");
+    const fullImage = document.getElementById("fullImage");
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    const imageLoading = document.getElementById("imageLoading");
+    const overlayText = document.getElementById("overlayText");
+    const glowEffect = document.getElementById("glowEffect");
 
-                gsap.to(particle, {
-                    opacity: 0,
-                    scale: 0,
-                    duration: duration * 0.6,
-                    delay: delay + duration * 0.4,
-                    ease: "power2.in"
-                });
-            });
-        }
-        
-        // Preload the image to ensure it's ready
-        function preloadImage() {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = () => {
-                    // Calculate aspect ratio to ensure full width display
-                    const aspectRatio = img.naturalWidth / img.naturalHeight;
-                    fullImage.dataset.aspectRatio = aspectRatio;
-                    resolve(img);
-                };
-                img.onerror = reject;
-                img.src = fullImage.src;
-            });
-        }
-        
-        // Function to fade out audio over 4 seconds
-        function fadeOutAudio() {
-            gsap.to(backgroundMusic, {
-                volume: 0,
-                duration: 4,
-                ease: "power2.out",
-                onComplete: () => {
-                    backgroundMusic.pause();
-                    backgroundMusic.volume = 1; // Reset volume for next play
-                }
-            });
-        }
-        
-        // Launch button click handler
-        launchBtn.addEventListener('click', async () => {
-            // Disable launch button during animation
-            launchBtn.disabled = true;
-            
-            // Show loading indicator with pulse animation
-            gsap.set(imageLoading, {opacity: 1, visibility: 'visible'});
-            imageLoading.classList.add('pulse');
-            
-            // Preload the image
-            await preloadImage();
-            
-            // Hide loading indicator
-            gsap.to(imageLoading, {
-                opacity: 0,
-                duration: 1.2,
-                ease: "power2.out",
-                onComplete: () => {
-                    imageLoading.classList.remove('pulse');
-                    gsap.set(imageLoading, {visibility: 'hidden'});
-                }
-            });
-            
-            // Immediately start the image launch animation
-            // Show image container
-            gsap.set(imageContainer, {visibility: 'visible'});
-            
-            // Create particles
-            const particles = createParticles();
-            
-            // Create the main animation timeline with ultra-smooth transitions
-            const mainTimeline = gsap.timeline({
-                onComplete: () => {
-                    // Show overlay text after image is fully zoomed
-                    gsap.to(overlayText, {
-                        opacity: 1,
-                        visibility: 'visible',
-                        duration: 1.8,
-                        ease: "power2.out"
-                    });
-                    
-                    // Start audio fade out after exactly 31 seconds from when audio started playing
-                    // The audio starts at 0.8 seconds into the timeline, so we calculate the remaining time
-                    const audioStartTime = 0.8; // When audio starts in the timeline
-                    const totalAudioDuration = 31; // Total audio duration in seconds
-                    const timeElapsed = audioStartTime; // Time from timeline start to audio start
-                    const remainingTime = totalAudioDuration - timeElapsed;
-                    
-                    setTimeout(() => {
-                        fadeOutAudio();
-                    }, remainingTime * 1000); // Convert to milliseconds
-                }
-            });
-            
-            // Much slower background fade in
-            mainTimeline.to(imageContainer, {
-                backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                duration: 3,
-                ease: "power3.inOut"
-            }, 0);
-            
-            // Slower glow effect animation
-            mainTimeline.to(glowEffect, {
-                width: '100vmax',
-                height: '100vmax',
-                opacity: 0.3,
-                duration: 2.5,
-                ease: "power2.out"
-            }, 0);
-            
-            // Particle animation
-            mainTimeline.add(() => {
-                animateParticles(particles);
-            }, 0.5);
-            
-            // Much slower, smoother image zoom animation
-            mainTimeline.to(fullImage, {
-                width: '100vw',
-                height: '100vh',
-                opacity: 1,
-                duration: 4,
-                ease: "expo.out",
-                onStart: () => {
-                    // Play background music when image starts zooming
-                    backgroundMusic.play();
-                }
-            }, 0.8);
+    function createParticles() {
+      const particles = [];
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+        imageContainer.appendChild(particle);
+        particles.push(particle);
+      }
+      return particles;
+    }
 
-            // Fade out glow effect
-            mainTimeline.to(glowEffect, {
-                opacity: 0,
-                duration: 2,
-                ease: "power2.in"
-            }, 3);
+    function animateParticles(particles) {
+      particles.forEach((particle, index) => {
+        const angle = (index / particles.length) * Math.PI * 2;
+        const distance = 100 + Math.random() * 200;
+        const duration = 2 + Math.random() * 2;
+        const delay = Math.random() * 1;
+
+        gsap.set(particle, {
+          x: Math.cos(angle) * distance,
+          y: Math.sin(angle) * distance,
+          scale: 0,
         });
-        
-        // Close image function - now only triggered by user interaction
-        function closeImage() {
-            // Create reverse animation timeline
-            const closeTimeline = gsap.timeline({
-                onComplete: () => {
-                    // Hide image container
-                    gsap.set(imageContainer, {visibility: 'hidden'});
-                    
-                    // Reset image to initial state
-                    gsap.set(fullImage, {
-                        width: 0,
-                        height: 0,
-                        opacity: 0
-                    });
-                    
-                    // Reset glow effect
-                    gsap.set(glowEffect, {
-                        width: 0,
-                        height: 0,
-                        opacity: 0
-                    });
-                    
-                    // Hide overlay text
-                    gsap.set(overlayText, {opacity: 0, visibility: 'hidden'});
-                    
-                    // Remove particles
-                    document.querySelectorAll('.particle').forEach(particle => {
-                        particle.remove();
-                    });
-                    
-                    // Re-enable launch button
-                    launchBtn.disabled = false;
-                    
-                    // Stop and reset audio
-                    backgroundMusic.pause();
-                    backgroundMusic.currentTime = 0;
-                    backgroundMusic.volume = 1;
-                }
-            });
-            
-            // Slower image zoom out animation
-            closeTimeline.to(fullImage, {
-                width: '0',
-                height: '0',
-                opacity: 0,
-                duration: 2.5,
-                ease: "expo.inOut"
-            }, 0);
-            
-            // Slower background fade out
-            closeTimeline.to(imageContainer, {
-                backgroundColor: 'rgba(0, 0, 0, 0)',
-                duration: 2.2,
-                ease: "power3.inOut"
-            }, 0.6);
-            
-            // Fade out audio when closing manually
-            fadeOutAudio();
-        }
-        
-        // Close image when clicking anywhere - user must manually close
-        imageContainer.addEventListener('click', () => {
-            closeImage();
+
+        gsap.to(particle, {
+          opacity: 1,
+          scale: 1,
+          duration: duration * 0.4,
+          delay: delay,
+          ease: "power2.out",
         });
-        
-        // Close image with ESC key - user must manually close
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && imageContainer.style.visibility === 'visible') {
-                closeImage();
-            }
+
+        gsap.to(particle, {
+          opacity: 0,
+          scale: 0,
+          duration: duration * 0.6,
+          delay: delay + duration * 0.4,
+          ease: "power2.in",
         });
-    </script>
+      });
+    }
+
+    function preloadImage() {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = fullImage.src;
+      });
+    }
+
+    function fadeOutAudio() {
+      gsap.to(backgroundMusic, {
+        volume: 0,
+        duration: 4,
+        ease: "power2.out",
+        onComplete: () => {
+          backgroundMusic.pause();
+          backgroundMusic.volume = 1;
+        },
+      });
+    }
+
+    launchBtn.addEventListener("click", async () => {
+      launchBtn.disabled = true;
+      gsap.set(imageLoading, { opacity: 1, visibility: "visible" });
+      imageLoading.classList.add("pulse");
+      await preloadImage();
+
+      gsap.to(imageLoading, {
+        opacity: 0,
+        duration: 1.2,
+        ease: "power2.out",
+        onComplete: () => {
+          imageLoading.classList.remove("pulse");
+          gsap.set(imageLoading, { visibility: "hidden" });
+        },
+      });
+
+      gsap.set(imageContainer, { visibility: "visible" });
+      const particles = createParticles();
+      gsap.set(fullImage, { scale: 0, opacity: 0 });
+
+      const mainTimeline = gsap.timeline({
+        onComplete: () => {
+          gsap.to(overlayText, {
+            opacity: 1,
+            visibility: "visible",
+            duration: 1.8,
+            ease: "power2.out",
+          });
+          setTimeout(() => fadeOutAudio(), 31000);
+        },
+      });
+
+      mainTimeline.to(imageContainer, {
+        backgroundColor: "rgba(0, 0, 0, 0.95)",
+        duration: 3,
+        ease: "power3.inOut",
+      });
+
+      mainTimeline.to(glowEffect, {
+        width: "100vmax",
+        height: "100vmax",
+        opacity: 0.3,
+        duration: 2.5,
+        ease: "power2.out",
+      });
+
+      mainTimeline.add(() => animateParticles(particles), 0.5);
+
+      mainTimeline.to(fullImage, {
+        scale: 1,
+        opacity: 1,
+        duration: 4,
+        ease: "expo.out",
+        onStart: () => backgroundMusic.play(),
+      }, 0.8);
+
+      mainTimeline.to(glowEffect, {
+        opacity: 0,
+        duration: 2,
+        ease: "power2.in",
+      }, 3);
+    });
+
+    function closeImage() {
+      const closeTimeline = gsap.timeline({
+        onComplete: () => {
+          gsap.set(imageContainer, { visibility: "hidden" });
+          gsap.set(fullImage, { scale: 0, opacity: 0 });
+          gsap.set(glowEffect, { width: 0, height: 0, opacity: 0 });
+          gsap.set(overlayText, { opacity: 0, visibility: "hidden" });
+          document.querySelectorAll(".particle").forEach((p) => p.remove());
+          launchBtn.disabled = false;
+          backgroundMusic.pause();
+          backgroundMusic.currentTime = 0;
+          backgroundMusic.volume = 1;
+        },
+      });
+
+      closeTimeline.to(fullImage, {
+        scale: 0,
+        opacity: 0,
+        duration: 2.5,
+        ease: "expo.inOut",
+      });
+
+      closeTimeline.to(imageContainer, {
+        backgroundColor: "rgba(0, 0, 0, 0)",
+        duration: 2.2,
+        ease: "power3.inOut",
+      }, 0.6);
+
+      fadeOutAudio();
+    }
+
+    imageContainer.addEventListener("click", closeImage);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && imageContainer.style.visibility === "visible") closeImage();
+    });
+  </script>
 </body>
 </html>
